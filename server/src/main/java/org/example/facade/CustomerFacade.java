@@ -1,5 +1,6 @@
 package org.example.facade;
 
+import org.example.dto.request.CustomerDtoRequest;
 import org.example.dto.response.CustomerDtoResponse;
 import org.example.entity.Customer;
 import org.example.service.CustomerService;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class CustomerFacade implements ServiceIml<CustomerDtoResponse> {
+public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDtoResponse> {
 
     @Autowired
     CustomerService customerService;
@@ -22,22 +23,22 @@ public class CustomerFacade implements ServiceIml<CustomerDtoResponse> {
     private ModelMapper mapper;
 
     @Override
-    public CustomerDtoResponse save(CustomerDtoResponse obj) {
+    public CustomerDtoResponse save(CustomerDtoRequest obj) {
         return mapper.map(customerService.save(mapper.map(obj, Customer.class)), CustomerDtoResponse.class);
     }
 
     @Override
-    public void delete(CustomerDtoResponse obj) {
+    public void delete(CustomerDtoRequest obj) {
         customerService.delete(mapper.map(obj, Customer.class));
     }
 
     @Override
-    public void deleteAll(List<CustomerDtoResponse> ent) {
+    public void deleteAll(List<CustomerDtoRequest> ent) {
         customerService.deleteAll(ent.stream().map(customerDto -> mapper.map(customerDto, Customer.class)).collect(Collectors.toList()));
     }
 
     @Override
-    public void saveAll(List<CustomerDtoResponse> ent) {
+    public void saveAll(List<CustomerDtoRequest> ent) {
         customerService.saveAll(ent.stream().map(customerDto -> mapper.map(customerDto, Customer.class)).collect(Collectors.toList()));
     }
 

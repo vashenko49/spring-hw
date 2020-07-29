@@ -21,9 +21,10 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employer extends AbstractEntity {
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(nullable = false)
     private String address;
-    @ManyToMany(mappedBy = "employers")
+    @ManyToMany(mappedBy = "employers", fetch = FetchType.LAZY)
     private List<Customer> customers = new ArrayList<>();
 }

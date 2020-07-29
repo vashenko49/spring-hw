@@ -1,10 +1,10 @@
 package org.example.facade;
 
+import org.example.dto.request.AccountDtoRequest;
 import org.example.dto.response.AccountDtoResponse;
 import org.example.entity.Account;
 import org.example.service.AccountService;
 import org.example.service.imp.AccountServiceIml;
-import org.example.service.imp.ServiceIml;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AccountFacade implements ServiceIml<AccountDtoResponse>, AccountServiceIml<AccountDtoResponse> {
+public class AccountFacade implements FacadeIml<AccountDtoRequest, AccountDtoResponse>, AccountServiceIml<AccountDtoResponse> {
 
     @Autowired
     AccountService accountService;
@@ -25,22 +25,22 @@ public class AccountFacade implements ServiceIml<AccountDtoResponse>, AccountSer
     }
 
     @Override
-    public AccountDtoResponse save(AccountDtoResponse obj) {
+    public AccountDtoResponse save(AccountDtoRequest obj) {
         return mapper.map(accountService.save(mapper.map(obj, Account.class)), AccountDtoResponse.class);
     }
 
     @Override
-    public void delete(AccountDtoResponse obj) {
+    public void delete(AccountDtoRequest obj) {
         accountService.delete(mapper.map(obj, Account.class));
     }
 
     @Override
-    public void deleteAll(List<AccountDtoResponse> ent) {
+    public void deleteAll(List<AccountDtoRequest> ent) {
         accountService.deleteAll(ent.stream().map(accountDto -> mapper.map(accountDto, Account.class)).collect(Collectors.toList()));
     }
 
     @Override
-    public void saveAll(List<AccountDtoResponse> ent) {
+    public void saveAll(List<AccountDtoRequest> ent) {
         accountService.saveAll(ent.stream().map(accountDto -> mapper.map(accountDto, Account.class)).collect(Collectors.toList()));
     }
 

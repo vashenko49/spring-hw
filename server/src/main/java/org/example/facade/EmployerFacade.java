@@ -1,5 +1,6 @@
 package org.example.facade;
 
+import org.example.dto.request.EmployerDtoRequest;
 import org.example.dto.response.EmployerDtoResponse;
 import org.example.entity.Employer;
 import org.example.service.EmployerService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class EmployerFacade implements ServiceIml<EmployerDtoResponse>, EmployerServiceIml<EmployerDtoResponse> {
+public class EmployerFacade implements FacadeIml<EmployerDtoRequest, EmployerDtoResponse>, EmployerServiceIml<EmployerDtoResponse> {
 
     @Autowired
     EmployerService employerService;
@@ -27,22 +28,22 @@ public class EmployerFacade implements ServiceIml<EmployerDtoResponse>, Employer
     }
 
     @Override
-    public EmployerDtoResponse save(EmployerDtoResponse obj) {
+    public EmployerDtoResponse save(EmployerDtoRequest obj) {
         return mapper.map(employerService.save(mapper.map(obj, Employer.class)), EmployerDtoResponse.class);
     }
 
     @Override
-    public void delete(EmployerDtoResponse obj) {
+    public void delete(EmployerDtoRequest obj) {
         employerService.delete(mapper.map(obj, Employer.class));
     }
 
     @Override
-    public void deleteAll(List<EmployerDtoResponse> ent) {
+    public void deleteAll(List<EmployerDtoRequest> ent) {
         employerService.deleteAll(ent.stream().map(employerDto -> mapper.map(employerDto, Employer.class)).collect(Collectors.toList()));
     }
 
     @Override
-    public void saveAll(List<EmployerDtoResponse> ent) {
+    public void saveAll(List<EmployerDtoRequest> ent) {
         employerService.saveAll(ent.stream().map(employerDto -> mapper.map(employerDto, Employer.class)).collect(Collectors.toList()));
     }
 

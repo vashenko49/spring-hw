@@ -1,15 +1,15 @@
 package org.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Entity
@@ -24,19 +24,24 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer extends AbstractEntity {
+    @Column(nullable = false)
     private String name;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
+    @Size(max = 150)
+    @Column(nullable = false)
     private Integer age;
+    @Column(nullable = false)
     private String password;
+    @Column(unique = true, nullable = false)
     private String phone;
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Account> accounts = new ArrayList<>();
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }, fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_employer",
             joinColumns = {@JoinColumn(name = "customer_id", referencedColumnName = "id")},
