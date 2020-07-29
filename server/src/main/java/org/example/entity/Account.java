@@ -1,9 +1,12 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
+
 import javax.persistence.*;
-import java.io.Serializable;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "account",
         uniqueConstraints = {
@@ -11,15 +14,18 @@ import java.io.Serializable;
                         columnNames = {"number"}
                 )
         })
-public class Account extends AbstractEntity implements Serializable {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Account extends AbstractEntity{
 
     @Column(name = "number")
     private String number;
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private Double balance;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
 }

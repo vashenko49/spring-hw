@@ -1,24 +1,37 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "customer",
         uniqueConstraints = {
                 @UniqueConstraint(
                         columnNames = {"email"}
                 )
         })
-public class Customer extends AbstractEntity implements Serializable {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Customer extends AbstractEntity {
     private String name;
     @Column(name = "email")
     private String email;
     private Integer age;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private String password;
+    private String phone;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Account> accounts = new ArrayList<>();
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
