@@ -5,7 +5,6 @@ import org.example.dto.response.EmployerDtoResponse;
 import org.example.entity.Employer;
 import org.example.service.EmployerService;
 import org.example.service.imp.EmployerServiceIml;
-import org.example.service.imp.ServiceIml;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +32,11 @@ public class EmployerFacade implements FacadeIml<EmployerDtoRequest, EmployerDto
     }
 
     @Override
+    public EmployerDtoResponse update(EmployerDtoRequest obj) {
+        return null;
+    }
+
+    @Override
     public void delete(EmployerDtoRequest obj) {
         employerService.delete(mapper.map(obj, Employer.class));
     }
@@ -49,7 +53,7 @@ public class EmployerFacade implements FacadeIml<EmployerDtoRequest, EmployerDto
 
     @Override
     public Page<EmployerDtoResponse> findAll(int page, int limit) {
-        return null;
+        return employerService.findAll(page, limit).map(employer -> mapper.map(employer, EmployerDtoResponse.class));
     }
 
     @Override

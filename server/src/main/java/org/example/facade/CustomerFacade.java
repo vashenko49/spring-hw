@@ -28,6 +28,11 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
     }
 
     @Override
+    public CustomerDtoResponse update(CustomerDtoRequest obj) {
+        return mapper.map(customerService.update(mapper.map(obj, Customer.class)), CustomerDtoResponse.class);
+    }
+
+    @Override
     public void delete(CustomerDtoRequest obj) {
         customerService.delete(mapper.map(obj, Customer.class));
     }
@@ -44,7 +49,8 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
 
     @Override
     public Page<CustomerDtoResponse> findAll(int page, int limit) {
-        return null;
+        Page<CustomerDtoResponse> map = customerService.findAll(page, limit).map(customer -> mapper.map(customer, CustomerDtoResponse.class));
+        return map;
     }
 
     @Override

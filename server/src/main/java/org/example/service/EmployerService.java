@@ -25,6 +25,11 @@ public class EmployerService implements ServiceIml<Employer>, EmployerServiceIml
     }
 
     @Override
+    public Employer update(Employer obj) {
+        return null;
+    }
+
+    @Override
     public void delete(Employer obj) {
         employerRepository.delete(obj);
     }

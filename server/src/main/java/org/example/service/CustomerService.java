@@ -24,6 +24,15 @@ public class CustomerService implements ServiceIml<Customer> {
     }
 
     @Override
+    public Customer update(Customer obj) {
+        Customer customer = customerRepository.findById(obj.getId()).get();
+        customer.setName(obj.getName());
+        customer.setPassword(obj.getPassword());
+        customer.setAge(obj.getAge());
+        return customerRepository.save(customer);
+    }
+
+    @Override
     public void delete(Customer obj) {
         customerRepository.delete(obj);
     }
@@ -41,7 +50,8 @@ public class CustomerService implements ServiceIml<Customer> {
     @Override
     @Transactional(readOnly = true)
     public Page<Customer> findAll(int page, int limit) {
-        return customerRepository.findAll(PageRequest.of(page, limit));
+        Page<Customer> all = customerRepository.findAll(PageRequest.of(page, limit));
+        return all;
     }
 
     @Override

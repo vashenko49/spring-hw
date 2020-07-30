@@ -3,21 +3,25 @@ package org.example.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dto.request.groups.New;
+import org.example.dto.request.groups.Update;
 import org.example.entity.Currency;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDtoRequest {
-    private Long id;
-    @NotBlank
+    @NotBlank(groups = {Update.class}, message = "number is require")
     private String number;
-    @NotBlank
+    @NotNull(groups = {New.class})
     private Currency currency;
-    @PositiveOrZero(message = "balance must be positive")
+    @NotNull(groups = {New.class})
+    @PositiveOrZero(message = "balance must be positive", groups = {New.class})
     private Double balance;
-    private String customerId;
+    @NotNull(message = "customer is require", groups = {New.class})
+    private Long customer;
 }

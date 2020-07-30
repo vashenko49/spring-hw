@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DefaultIml<EntReq, EntRes> {
     EntRes save(EntReq obj);
+    EntRes update(EntReq obj);
 
     void delete(EntReq obj);
 

@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +22,16 @@ import java.util.List;
                 )
         })
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Customer extends AbstractEntity {
     @Column(nullable = false)
     private String name;
-    @Column(name = "email", nullable = false)
+    @Column( nullable = false)
     private String email;
-    @Size(max = 150)
-    @Column(nullable = false)
+    @Column(nullable = false )
     private Integer age;
     @Column(nullable = false)
     private String password;

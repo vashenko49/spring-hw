@@ -1,48 +1,60 @@
 package org.example.controller;
 
-import org.example.dto.response.AccountDtoResponse;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.example.dto.request.CustomerDtoRequest;
+import org.example.dto.request.groups.New;
+import org.example.dto.request.groups.Update;
 import org.example.dto.response.CustomerDtoResponse;
+import org.example.dto.response.groups.FullUser;
+import org.example.dto.response.groups.ListUser;
+import org.example.facade.CustomerFacade;
+import org.example.facade.EmployerFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api0/customer")
 public class CustomerController {
+    @Autowired
+    CustomerFacade customerFacade;
+    @Autowired
+    EmployerFacade employerFacade;
 
     @GetMapping("/{id}")
+    @JsonView({FullUser.class})
     public CustomerDtoResponse getCustomerById(@PathVariable(value = "id") Long id) {
-        return null;
+        return customerFacade.getById(id);
     }
 
     @GetMapping("")
-    public Page<CustomerDtoResponse> getAllCustomers() {
-        return null;
+    @JsonView({ListUser.class})
+    public Page<CustomerDtoResponse> getAllCustomers(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+        return customerFacade.findAll(page, limit);
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public CustomerDtoResponse createCustomer() {
-        return null;
+    @PostMapping(path = "",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerDtoResponse createCustomer(@Validated(New.class) @RequestBody CustomerDtoRequest customer) {
+        return customerFacade.save(customer);
     }
 
-    @PutMapping("")
-    public CustomerDtoResponse updateCustomer() {
-        return null;
+    @PutMapping(path = "",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerDtoResponse updateCustomer(@Validated(Update.class) @RequestBody CustomerDtoRequest customer) {
+        return customerFacade.update(customer);
     }
 
-    @DeleteMapping("")
-    public void deleteCustomer() {
-
-    }
-
-    @PostMapping("/account")
-    public AccountDtoResponse createAccount() {
-        return null;
-    }
-
-    @DeleteMapping("/account")
-    public void deleteAccount() {
-
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
+        customerFacade.deleteById(customerId);
     }
 
     @PutMapping("/employer")

@@ -4,6 +4,8 @@ package org.example.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dto.request.groups.New;
+import org.example.dto.request.groups.Update;
 
 import javax.validation.constraints.*;
 
@@ -11,15 +13,32 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDtoRequest {
+    @NotNull(groups = {Update.class})
     private Long id;
-    @NotBlank(message = "name is require")
+    @NotBlank(
+            message = "name is require",
+            groups = {New.class, Update.class}
+    )
     private String name;
-    @NotNull
-    @Positive(message = "age must be positive")
+    @NotNull(groups = {New.class, Update.class})
+    @Positive(
+            message = "age must be positive",
+            groups = {New.class, Update.class}
+    )
     private Integer age;
-    @Email
+    @Email(groups = {New.class})
     private String email;
-    @NotNull(message = "phone is require")
-    @Pattern(regexp = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$")
+    @NotBlank(message = "phone is require", groups = {New.class})
+    @Pattern(
+            regexp = "^(\\+)?(\\(\\d{2,3}\\) ?\\d|\\d)(([ \\-]?\\d)|( ?\\(\\d{2,3}\\) ?)){5,12}\\d$",
+            message = "not valid phone",
+            groups = {New.class}
+    )
     private String phone;
+    @NotBlank(message = "password is require")
+    @Pattern(
+            regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$",
+            message = "not valid password"
+    )
+    private String password;
 }

@@ -27,6 +27,14 @@ public class AccountService implements ServiceIml<Account>, AccountServiceIml<Ac
     }
 
     @Override
+    public Account update(Account obj) {
+        Account accountByNumber = accountRepository.getAccountByNumber(obj.getNumber());
+        accountByNumber.setBalance(obj.getBalance());
+        accountByNumber.setCurrency(obj.getCurrency());
+        return accountRepository.save(accountByNumber);
+    }
+
+    @Override
     public void delete(Account obj) {
         accountRepository.delete(obj);
     }
@@ -62,5 +70,12 @@ public class AccountService implements ServiceIml<Account>, AccountServiceIml<Ac
     @Transactional(readOnly = true)
     public Account getAccountByNumber(String number) {
         return accountRepository.getAccountByNumber(number);
+    }
+
+    @Override
+    public Account topUpAccount(String number, double sum) {
+        Account accountByNumber = accountRepository.getAccountByNumber(number);
+        accountByNumber.setBalance(accountByNumber.getBalance() + sum);
+        return accountRepository.save(accountByNumber);
     }
 }
