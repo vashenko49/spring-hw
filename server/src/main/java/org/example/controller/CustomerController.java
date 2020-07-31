@@ -8,7 +8,6 @@ import org.example.dto.response.CustomerDtoResponse;
 import org.example.dto.response.groups.FullUser;
 import org.example.dto.response.groups.ListUser;
 import org.example.facade.CustomerFacade;
-import org.example.facade.EmployerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     @Autowired
     CustomerFacade customerFacade;
-    @Autowired
-    EmployerFacade employerFacade;
 
     @GetMapping("/{id}")
     @JsonView({FullUser.class})
@@ -56,15 +53,4 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
         customerFacade.deleteById(customerId);
     }
-
-    @PutMapping("/employer")
-    public CustomerDtoResponse addCustomerToEmployer() {
-        return null;
-    }
-
-    @DeleteMapping("/employer")
-    public CustomerDtoResponse removeCustomerFromEmployer() {
-        return null;
-    }
-
 }

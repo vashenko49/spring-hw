@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import org.example.entity.enums.Currency;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

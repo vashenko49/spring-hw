@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.example.dto.response.groups.ListUser;
-import org.example.entity.Currency;
+import org.example.entity.enums.Currency;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

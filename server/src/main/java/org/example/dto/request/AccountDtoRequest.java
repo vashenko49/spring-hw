@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
-import org.example.entity.Currency;
+import org.example.entity.enums.Currency;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

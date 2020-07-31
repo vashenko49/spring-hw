@@ -29,7 +29,8 @@ public class AbstractEntity implements Serializable {
     private Date createdDate;
     @LastModifiedDate
     @Temporal(TIMESTAMP)
-    private Date  lastModifiedDate;
+    @Column(name = "last_modified_date")
+    private Date lastModifiedDate;
     @Version
     private int version;
 }

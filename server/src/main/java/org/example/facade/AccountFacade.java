@@ -36,6 +36,16 @@ public class AccountFacade implements FacadeIml<AccountDtoRequest, AccountDtoRes
     }
 
     @Override
+    public AccountDtoResponse withdrawFromAccount(String number, double sum) {
+        return mapper.map(accountService.withdrawFromAccount(number, sum), AccountDtoResponse.class);
+    }
+
+    @Override
+    public void transfer(String fromNum, String toNum, double sum) {
+        accountService.transfer(fromNum, toNum, sum);
+    }
+
+    @Override
     public AccountDtoResponse save(AccountDtoRequest obj) {
         Customer byId = customerService.getById(obj.getCustomer());
         Account map = mapper.map(obj, Account.class);

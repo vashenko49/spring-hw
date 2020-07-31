@@ -1,7 +1,7 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
+import {bindActionCreators} from 'redux';
 import * as SystemAction from '../../actions/System/System';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
@@ -9,8 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StyledLink from '../StyledLink/StyledLink';
-import Divider from '@material-ui/core/Divider';
-import HomeIcon from '@material-ui/icons/Home';
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 
 const useStyles = makeStyles({
     list: {
@@ -31,16 +32,31 @@ const LeftDrawer = ({
         <SwipeableDrawer anchor={'left'} open={drawer} onClose={closeDrawer} onOpen={openDrawer}>
             <div className={classes.list} onClick={closeDrawer} onKeyDown={closeDrawer}>
                 <List>
-                    <StyledLink to={'/'}>
+                    <StyledLink to={'/customer'}>
                         <ListItem button>
                             <ListItemIcon>
-                                <HomeIcon />
+                                <AccessibilityIcon />
                             </ListItemIcon>
-                            <ListItemText primary={'Home'} />
+                            <ListItemText primary={'Customer'} />
+                        </ListItem>
+                    </StyledLink>
+                    <StyledLink to={'/account'}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AccountBalanceWalletIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Account'} />
+                        </ListItem>
+                    </StyledLink>
+                    <StyledLink to={'/employer'}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <LocationCityIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Employer'} />
                         </ListItem>
                     </StyledLink>
                 </List>
-                <Divider />
             </div>
         </SwipeableDrawer>
     );

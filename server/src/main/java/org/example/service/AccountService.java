@@ -8,6 +8,7 @@ import org.example.service.imp.ServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,5 +78,35 @@ public class AccountService implements ServiceIml<Account>, AccountServiceIml<Ac
         Account accountByNumber = accountRepository.getAccountByNumber(number);
         accountByNumber.setBalance(accountByNumber.getBalance() + sum);
         return accountRepository.save(accountByNumber);
+    }
+
+    @Override
+    public Account withdrawFromAccount(String number, double sum) {
+        Account accountByNumber = accountRepository.getAccountByNumber(number);
+        if (accountByNumber.getBalance() >= sum) {
+            accountByNumber.setBalance(accountByNumber.getBalance() - sum);
+        }
+        return accountRepository.save(accountByNumber);
+    }
+
+    @Override
+    public void transfer(String fromNum, String toNum, double sum) {
+        Account accountFrom = accountRepository.getAccountByNumber(fromNum);
+        Account accountTo = accountRepository.getAccountByNumber(toNum);
+        if (accountFrom.getBalance() >= sum) {
+
+            /*
+            * Процесс конвертации валют
+            * */
+            double sumTo = sum;
+            if(!accountFrom.getCurrency().equals(accountTo.getCurrency())){
+                sumTo = accountFrom.getCurrency().currencyConversion(sum, accountTo.getCurrency());
+            }
+
+            accountTo.setBalance(accountTo.getBalance() + sumTo);
+            accountFrom.setBalance(accountFrom.getBalance() - sum);
+        }
+        accountRepository.save(accountFrom);
+        accountRepository.save(accountTo);
     }
 }

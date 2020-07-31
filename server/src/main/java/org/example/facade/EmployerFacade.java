@@ -27,13 +27,23 @@ public class EmployerFacade implements FacadeIml<EmployerDtoRequest, EmployerDto
     }
 
     @Override
+    public void addCustomerToEmployer(Long customerId, Long employerId) {
+        employerService.addCustomerToEmployer(customerId, employerId);
+    }
+
+    @Override
+    public void removeCustomerFromEmployer(Long customerId, Long employerId) {
+        employerService.removeCustomerFromEmployer(customerId, employerId);
+    }
+
+    @Override
     public EmployerDtoResponse save(EmployerDtoRequest obj) {
         return mapper.map(employerService.save(mapper.map(obj, Employer.class)), EmployerDtoResponse.class);
     }
 
     @Override
     public EmployerDtoResponse update(EmployerDtoRequest obj) {
-        return null;
+        return mapper.map(employerService.update(mapper.map(obj, Employer.class)), EmployerDtoResponse.class);
     }
 
     @Override
@@ -53,7 +63,8 @@ public class EmployerFacade implements FacadeIml<EmployerDtoRequest, EmployerDto
 
     @Override
     public Page<EmployerDtoResponse> findAll(int page, int limit) {
-        return employerService.findAll(page, limit).map(employer -> mapper.map(employer, EmployerDtoResponse.class));
+        Page<EmployerDtoResponse> map = employerService.findAll(page, limit).map(employer -> mapper.map(employer, EmployerDtoResponse.class));
+        return map;
     }
 
     @Override

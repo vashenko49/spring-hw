@@ -1,12 +1,15 @@
 package org.example.service;
 
+import org.example.entity.Customer;
 import org.example.entity.Employer;
+import org.example.repos.CustomerRepository;
 import org.example.repos.EmployerRepository;
 import org.example.service.imp.EmployerServiceIml;
 import org.example.service.imp.ServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,8 @@ public class EmployerService implements ServiceIml<Employer>, EmployerServiceIml
 
     @Autowired
     EmployerRepository employerRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Override
     public Employer save(Employer obj) {
@@ -26,7 +31,10 @@ public class EmployerService implements ServiceIml<Employer>, EmployerServiceIml
 
     @Override
     public Employer update(Employer obj) {
-        return null;
+        Employer employer = employerRepository.findById(obj.getId()).get();
+        employer.setAddress(obj.getAddress());
+        employer.setName(obj.getName());
+        return employerRepository.save(employer);
     }
 
     @Override
@@ -52,7 +60,13 @@ public class EmployerService implements ServiceIml<Employer>, EmployerServiceIml
 
     @Override
     public void deleteById(Long id) {
-        employerRepository.deleteById(id);
+        Employer employer = employerRepository.findById(id).get();
+        for (Customer customer : employer.getCustomers()) {
+            customer.getEmployers().remove(employer);
+        }
+        employer.getCustomers().clear();
+        employerRepository.save(employer);
+        employerRepository.delete(employer);
     }
 
     @Override
@@ -65,5 +79,27 @@ public class EmployerService implements ServiceIml<Employer>, EmployerServiceIml
     @Transactional(readOnly = true)
     public Employer getByName(String name) {
         return employerRepository.getByName(name);
+    }
+
+    @Override
+    public void addCustomerToEmployer(Long customerId, Long employerId) {
+        Customer customer = customerRepository.findById(customerId).get();
+        Employer employer = employerRepository.findById(employerId).get();
+
+        employer.getCustomers().add(customer);
+        customer.getEmployers().add(employer);
+
+        employerRepository.save(employer);
+    }
+
+    @Override
+    public void removeCustomerFromEmployer(Long customerId, Long employerId) {
+        Customer customer = customerRepository.findById(customerId).get();
+        Employer employer = employerRepository.findById(employerId).get();
+
+        employer.getCustomers().remove(customer);
+        customer.getEmployers().remove(employer);
+
+        employerRepository.save(employer);
     }
 }

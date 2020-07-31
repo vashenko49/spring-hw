@@ -1,14 +1,12 @@
 package org.example.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.example.entity.enums.Currency;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GeneratorType;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 
 @EqualsAndHashCode(callSuper = true)

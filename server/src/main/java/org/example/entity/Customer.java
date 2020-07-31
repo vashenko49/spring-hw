@@ -42,7 +42,8 @@ public class Customer extends AbstractEntity {
     List<Account> accounts = new ArrayList<>();
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.DETACH
     }, fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_employer",
