@@ -49,8 +49,8 @@ public class CustomerController {
         return customerFacade.update(customer);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable(value = "id") Long customerId) {
+    @DeleteMapping("")
+    public void deleteCustomer(@RequestParam(value = "id") Long customerId) {
         customerFacade.deleteById(customerId);
     }
 }
