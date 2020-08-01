@@ -19,8 +19,11 @@ public class CustomerDtoRequest {
             message = "name is require",
             groups = {New.class, Update.class}
     )
+    @Size(min = 2)
     private String name;
     @NotNull(groups = {New.class, Update.class})
+    @Min(18)
+    @Max(150)
     @Positive(
             message = "age must be positive",
             groups = {New.class, Update.class}

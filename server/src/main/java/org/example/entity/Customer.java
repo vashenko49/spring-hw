@@ -29,9 +29,9 @@ import java.util.List;
 public class Customer extends AbstractEntity {
     @Column(nullable = false)
     private String name;
-    @Column( nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
-    @Column(nullable = false )
+    @Column(nullable = false)
     private Integer age;
     @Column(nullable = false)
     private String password;
@@ -48,7 +48,7 @@ public class Customer extends AbstractEntity {
     @JoinTable(
             name = "customer_employer",
             joinColumns = {@JoinColumn(name = "customer_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "employer_id",referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "employer_id", referencedColumnName = "id")},
             uniqueConstraints = {@UniqueConstraint(
                     columnNames = {"customer_id", "employer_id"}
             )}

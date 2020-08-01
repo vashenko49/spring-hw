@@ -46,8 +46,8 @@ public class AccountController {
         return accountFacade.update(account);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteAccount(@PathVariable(value = "id") Long accountId) {
+    @DeleteMapping("")
+    public void deleteAccount(@RequestParam(value = "id") Long accountId) {
         accountFacade.deleteById(accountId);
     }
 

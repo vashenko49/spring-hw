@@ -1,11 +1,22 @@
 import React, {createRef} from 'react';
-import {Container} from "@material-ui/core";
+import {Container, Typography} from "@material-ui/core";
 import MaterialTable from "material-table";
 import CustomerAPI from "../../Service/CustomerAPI";
 import TableIcons from "../TableIcons/TableIcons";
 import AccountAPI from "../../Service/AccountAPI";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {bindActionCreators} from "redux";
+import { connect } from 'react-redux';
+import * as SystemAction from "../../actions/System/System"
 
-const Customer = () => {
+const useStyles = makeStyles({
+    root:{
+        paddingTop:"25px"
+    }
+})
+
+const Customer = ({history}) => {
+    const classes = useStyles();
     const tableRef = createRef();
     const loadCustomer = query => new Promise((resolve, reject) => {
         let {page, pageSize: limit} = query;
@@ -38,7 +49,7 @@ const Customer = () => {
                     for (let j = 0; j < content[i].accounts.length; j++) {
                         data.push({
                             ...content[i].accounts[j],
-                            id: "id account" + content[i].accounts[j].id,
+                            id: content[i].accounts[j].id * 951,
                             parentId: content[i].id
                         })
                     }
@@ -48,13 +59,18 @@ const Customer = () => {
             return {data, totalCount, page};
         })
 
-    const saveCustomer = (event, rowData) => {
-
+    const saveOrUpdateCustomer = (event, rowData, status) => {
+        if(status==="update"){
+            history.push(`/customer-detail?status=${status}&id=${rowData.id}`);
+        }else {
+            history.push(`/customer-detail?status=${status}`);
+        }
     };
 
     const deleteCustomer = oldData => new Promise((resolve, reject) => {
+
         if (oldData.parentId) {
-            AccountAPI.deleteAccount(oldData.id)
+            AccountAPI.deleteAccount(oldData.id / 951)
                 .then(() => {
                     resolve();
                 })
@@ -75,12 +91,16 @@ const Customer = () => {
     });
 
     return (
-        <Container>
+        <Container className={classes.root}>
             <MaterialTable
                 tableRef={tableRef}
                 icons={TableIcons}
                 columns={[
-                    {title: "Customer id", field: "id"},
+                    {
+                        title: "Customer id", field: "id", render: rowData => {
+                            return rowData.parentId ? (<></>) : (<Typography variant={"body1"}>{rowData.id}</Typography>)
+                        }
+                    },
                     {title: "Name", field: "name"},
                     {title: "Number", field: "number"},
                     {title: "Currency", field: "currency"},
@@ -95,10 +115,37 @@ const Customer = () => {
                 editable={{
                     onRowDelete: deleteCustomer
                 }}
+                actions={[
+                    {
+                        icon: TableIcons.Refresh,
+                        tooltip: 'Refresh Data',
+                        isFreeAction: true,
+                        onClick: () => tableRef.current && tableRef.current.onQueryChange()
+                    },
+                    {
+                        icon: TableIcons.Edit,
+                        tooltip: 'Edit Product',
+                        onClick: (event, rowData)=>saveOrUpdateCustomer(event, rowData, "update")
+                    },
+                    {
+                        icon: TableIcons.Add,
+                        tooltip: 'Add Shipping Method',
+                        isFreeAction: true,
+                        onClick:  (event, rowData)=>saveOrUpdateCustomer(event, rowData, "save")
+                    }
+                ]}
             />
 
         </Container>
     );
 };
 
-export default Customer;
+
+const mapDispatchToProps = dispatch => {
+    return {
+        startLoad: bindActionCreators(SystemAction.startLoad, dispatch),
+        stopLoad: bindActionCreators(SystemAction.stopLoad, dispatch),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Customer);
