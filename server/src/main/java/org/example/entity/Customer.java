@@ -37,13 +37,10 @@ public class Customer extends AbstractEntity {
     private String password;
     @Column(unique = true, nullable = false)
     private String phone;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     List<Account> accounts = new ArrayList<>();
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.DETACH
+            CascadeType.MERGE
     }, fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_employer",

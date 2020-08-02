@@ -24,6 +24,6 @@ public class Employer extends AbstractEntity {
     private String name;
     @Column(nullable = false)
     private String address;
-    @ManyToMany(mappedBy = "employers", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "employers", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Customer> customers = new ArrayList<>();
 }

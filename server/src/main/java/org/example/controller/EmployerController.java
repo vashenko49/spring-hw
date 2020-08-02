@@ -58,8 +58,8 @@ public class EmployerController {
         return employerFacade.update(employer);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteEmployer(@PathVariable(value = "id") Long employerId) {
+    @DeleteMapping("")
+    public void deleteEmployer(@RequestParam(value = "id") Long employerId) {
         employerFacade.deleteById(employerId);
     }
 }

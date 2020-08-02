@@ -8,6 +8,7 @@ import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -44,4 +45,6 @@ public class CustomerDtoRequest {
             message = "not valid password"
     )
     private String password;
+    @NotNull(groups = {New.class, Update.class})
+    private List<EmployerDtoRequest> employers;
 }

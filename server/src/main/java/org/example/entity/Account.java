@@ -31,7 +31,7 @@ public class Account extends AbstractEntity {
     private Currency currency;
     @Column(nullable = false)
     private Double balance;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Customer customer;
 }

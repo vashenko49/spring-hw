@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import {bindActionCreators} from "redux";
 import * as SystemAction from "../../actions/System/System";
 import {connect} from "react-redux";
-import Grid from "@material-ui/core/Grid";
 import Employer from "../Employer/Employer";
 import Account from "../Account/Account";
 
@@ -24,13 +23,16 @@ const useStyles = makeStyles({
     },
     employerAndAccountBlock: {
         margin: '25px 0 0 0'
+    },
+    table: {
+        margin: "15px 0"
     }
 })
 
 const CustomerDetail = ({history, startLoad, stopLoad}) => {
     const classes = useStyles();
     const [isNewCustomer, setIsNewCustomer] = useState(true);
-    const [customerId, setCustomerId] = useState(null);
+    const [customerId, setCustomerId] = useState("");
     const [customerData, setCustomerData] = useState({
         showPassword: false,
         showRepeatPassword: false,
@@ -49,7 +51,6 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
             return value === customerData.password;
         });
     });
-
     // eslint-disable-next-line
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -65,24 +66,33 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                 })
         }
         ValidatorForm.removeValidationRule('isPasswordMatch');
+        // eslint-disable-next-line
     }, []);
-
     const handleChange = e => {
         setCustomerData({
             ...customerData,
             [`${e.target.name}`]: e.target.value
         });
     };
-
     const handleClickShowPassword = name => {
         setCustomerData({
             ...customerData,
             [`${name}`]: !customerData[`${name}`]
         });
     };
-
-    const handleSubmit = e => {
-        e.preventDefault();
+    const changeEmployer = employers => {
+        setCustomerData({
+            ...customerData,
+            employers
+        });
+    }
+    const changeAccount = accounts => {
+        setCustomerData({
+            ...customerData,
+            accounts
+        });
+    }
+    const handleSubmit = () => {
         startLoad();
         if (isNewCustomer) {
             CustomerAPI.createCustomer({
@@ -90,7 +100,8 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                 age: customerData.age,
                 email: customerData.email,
                 phone: customerData.phone,
-                password: customerData.password
+                password: customerData.password,
+                employers: customerData.employers,
             })
                 .then(res => {
                     setIsNewCustomer(false);
@@ -104,7 +115,8 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                 age: customerData.age,
                 email: customerData.email,
                 phone: customerData.phone,
-                password: customerData.password
+                password: customerData.password,
+                employers: customerData.employers,
             })
                 .then(res => {
                     setCustomerData({
@@ -121,7 +133,13 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
             <Card>
                 <CardContent>
                     <Typography variant={"h3"}>{isNewCustomer ? "Create new customer" : "Edit customer"}</Typography>
-                    <ValidatorForm onSubmit={handleSubmit} onError={e => console.log(e)}>
+                    <ValidatorForm
+                        onSubmit={e => {
+                            e.preventDefault();
+                            handleSubmit()
+                        }}
+                        onError={e => console.log(e)}
+                    >
                         <FormControl fullWidth variant="outlined">
                             <TextValidator
                                 className={classes.inputData}
@@ -155,7 +173,7 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                                 fullWidth
                                 variant="outlined"
                                 validators={['required', "minNumber:18", "maxNumber:150"]}
-                                errorMessages={['This field is required', "This field must be more than 18","This field must be less than 150"]}
+                                errorMessages={['This field is required', "This field must be more than 18", "This field must be less than 150"]}
                             />
                             <TextValidator
                                 className={classes.inputData}
@@ -216,40 +234,31 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                                     )
                                 }}
                             />
-                            <Button
-                                className={classes.inputData}
-                                type={'submit'}
-                                fullWidth={true}
-                                variant="contained"
-                                color="primary"
-                            >
-                                Confirm
-                            </Button>
                         </FormControl>
                     </ValidatorForm>
                 </CardContent>
             </Card>
-
-            <Grid
-                className={classes.employerAndAccountBlock}
-                container
-                spacing={3}
+            <div className={classes.table}>
+                <Employer employers={customerData.employers} setEmployer={changeEmployer}/>
+            </div>
+            <div className={classes.table}>
+                <Account
+                    accounts={customerData.accounts}
+                    setAccounts={changeAccount}
+                    customerId={customerId}
+                    isNewCustomer={isNewCustomer}
+                />
+            </div>
+            <Button
+                className={classes.inputData}
+                type={'submit'}
+                fullWidth={true}
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
             >
-                <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Card>
-                        <CardContent>
-                            <Employer employers={customerData.employers}/>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Card>
-                        <CardContent>
-                            <Account accounts={customerData.accounts}/>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                Confirm
+            </Button>
         </Container>
     );
 };

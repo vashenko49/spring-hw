@@ -26,12 +26,7 @@ public class CustomerService implements ServiceIml<Customer> {
 
     @Override
     public Customer update(Customer obj) {
-        Customer customer = customerRepository.findById(obj.getId()).get();
-        customer.setName(obj.getName());
-        customer.setPassword(obj.getPassword());
-        customer.setEmail(obj.getEmail());
-        customer.setAge(obj.getAge());
-        return customerRepository.save(customer);
+        return customerRepository.save(obj);
     }
 
     @Override
