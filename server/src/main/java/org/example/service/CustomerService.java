@@ -6,14 +6,14 @@ import org.example.service.imp.ServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service("customerService")
-@Transactional
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class CustomerService implements ServiceIml<Customer> {
 
     @Autowired
@@ -59,6 +59,7 @@ public class CustomerService implements ServiceIml<Customer> {
     @Override
     @Transactional(readOnly = true)
     public Customer getById(Long id) {
-        return customerRepository.findById(id).get();
+        Customer customer = customerRepository.findById(id).get();
+        return customer;
     }
 }

@@ -59,6 +59,8 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
 
     @Override
     public CustomerDtoResponse getById(Long id) {
-        return mapper.map(customerService.getById(id), CustomerDtoResponse.class);
+        Customer byId = customerService.getById(id);
+        CustomerDtoResponse map = mapper.map(byId, CustomerDtoResponse.class);
+        return map;
     }
 }

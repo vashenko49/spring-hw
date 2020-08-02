@@ -37,7 +37,7 @@ public class Customer extends AbstractEntity {
     private String password;
     @Column(unique = true, nullable = false)
     private String phone;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Account> accounts = new ArrayList<>();
     @ManyToMany(cascade = {
             CascadeType.MERGE

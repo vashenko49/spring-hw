@@ -3,6 +3,7 @@ package org.example.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
@@ -10,12 +11,11 @@ import org.example.dto.request.groups.Update;
 import javax.validation.constraints.*;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDtoRequest {
-    @NotNull(groups = {Update.class})
-    private Long id;
+public class CustomerDtoRequest extends AbstractDtoRequest {
     @NotBlank(
             message = "name is require",
             groups = {New.class, Update.class}
