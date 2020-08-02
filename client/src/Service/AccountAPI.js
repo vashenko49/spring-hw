@@ -15,4 +15,7 @@ export default class AccountAPI {
         }
     }).then(res => res.data);
     static getAccountByNumber = number => axios.get(`/api0/account/number/${number}`).then(res => res.data);
+    static topUpAccount = data => axios.put(`/api0/account/topup`, data).then(res => res.data);
+    static withdrawFromAccount = data => axios.put(`/api0/account/withdraw`, data).then(res => res.data);
+    static transfer = data => axios.put(`/api0/account/transfer`, data).then(res => res.data);
 }

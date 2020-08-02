@@ -10,7 +10,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StyledLink from '../StyledLink/StyledLink';
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
-import LocationCityIcon from '@material-ui/icons/LocationCity';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 
 const useStyles = makeStyles({
@@ -40,20 +39,12 @@ const LeftDrawer = ({
                             <ListItemText primary={'Customer'} />
                         </ListItem>
                     </StyledLink>
-                    <StyledLink to={'/account'}>
+                    <StyledLink to={'/transfer'}>
                         <ListItem button>
                             <ListItemIcon>
                                 <AccountBalanceWalletIcon />
                             </ListItemIcon>
-                            <ListItemText primary={'Account'} />
-                        </ListItem>
-                    </StyledLink>
-                    <StyledLink to={'/employer'}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <LocationCityIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={'Employer'} />
+                            <ListItemText primary={'Transfer'} />
                         </ListItem>
                     </StyledLink>
                 </List>

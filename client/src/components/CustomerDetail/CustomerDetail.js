@@ -42,6 +42,7 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
         email: "",
         age: 30,
         phone: 30,
+        version: 0,
         accounts: [],
         employers: []
     })
@@ -116,12 +117,14 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
                 email: customerData.email,
                 phone: customerData.phone,
                 password: customerData.password,
+                version: customerData.version,
                 employers: customerData.employers,
             })
                 .then(res => {
                     setCustomerData({
                         ...customerData,
-                        ...res
+                        ...res,
+                        accounts: customerData.accounts
                     })
                 })
         }

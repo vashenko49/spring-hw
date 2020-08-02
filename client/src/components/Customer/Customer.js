@@ -6,12 +6,12 @@ import TableIcons from "../TableIcons/TableIcons";
 import AccountAPI from "../../Service/AccountAPI";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {bindActionCreators} from "redux";
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as SystemAction from "../../actions/System/System"
 
 const useStyles = makeStyles({
-    root:{
-        paddingTop:"25px"
+    root: {
+        paddingTop: "25px"
     }
 })
 
@@ -60,9 +60,10 @@ const Customer = ({history}) => {
         })
 
     const saveOrUpdateCustomer = (event, rowData, status) => {
-        if(status==="update"){
-            history.push(`/customer-detail?status=${status}&id=${rowData.id}`);
-        }else {
+        if (status === "update") {
+            let id = (rowData.parentId) ? rowData.parentId : rowData.id;
+            history.push(`/customer-detail?status=${status}&id=${id}`);
+        } else {
             history.push(`/customer-detail?status=${status}`);
         }
     };
@@ -98,7 +99,8 @@ const Customer = ({history}) => {
                 columns={[
                     {
                         title: "Customer id", field: "id", render: rowData => {
-                            return rowData.parentId ? (<></>) : (<Typography variant={"body1"}>{rowData.id}</Typography>)
+                            return rowData.parentId ? (<></>) : (
+                                <Typography variant={"body1"}>{rowData.id}</Typography>)
                         }
                     },
                     {title: "Name", field: "name"},
@@ -125,13 +127,13 @@ const Customer = ({history}) => {
                     {
                         icon: TableIcons.Edit,
                         tooltip: 'Edit Product',
-                        onClick: (event, rowData)=>saveOrUpdateCustomer(event, rowData, "update")
+                        onClick: (event, rowData) => saveOrUpdateCustomer(event, rowData, "update")
                     },
                     {
                         icon: TableIcons.Add,
                         tooltip: 'Add Shipping Method',
                         isFreeAction: true,
-                        onClick:  (event, rowData)=>saveOrUpdateCustomer(event, rowData, "save")
+                        onClick: (event, rowData) => saveOrUpdateCustomer(event, rowData, "save")
                     }
                 ]}
             />

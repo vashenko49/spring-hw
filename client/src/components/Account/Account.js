@@ -21,6 +21,9 @@ const Account = ({accounts, setAccounts, customerId, isNewCustomer}) => {
             })
     });
     const createAccounts = newData => new Promise((resolve, reject) => {
+        if (!newData.currency) {
+            newData.currency = "USD"
+        }
         AccountAPI.createAccount({
             ...newData,
             customer: customerId
