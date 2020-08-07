@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.request.CustomerIdAndEmployerIdRequest;
 import org.example.dto.request.EmployerDtoRequest;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
@@ -7,11 +8,8 @@ import org.example.dto.response.EmployerDtoResponse;
 import org.example.facade.EmployerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api0/employer")
@@ -19,7 +17,7 @@ public class EmployerController {
     @Autowired
     EmployerFacade employerFacade;
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public EmployerDtoResponse getEmployerById(@PathVariable(value = "id") Long id) {
         return employerFacade.getById(id);
     }
@@ -31,29 +29,28 @@ public class EmployerController {
         return employerFacade.findAll(page, limit);
     }
 
-    @PutMapping("/add")
+    @PutMapping("add")
     public void addCustomerToEmployer(
-            @RequestBody HashMap<String, Long> data) {
-        employerFacade.addCustomerToEmployer(data.get("customerId"), data.get("employerId"));
-    }
-
-    @PutMapping("/remove")
-    public void removeCustomerFromEmployer(
-            @RequestBody HashMap<String, Long> data
+            @Validated @RequestBody CustomerIdAndEmployerIdRequest data
     ) {
-        employerFacade.removeCustomerFromEmployer(data.get("customerId"), data.get("employerId"));
+        employerFacade.addCustomerToEmployer(data.getCustomerId(), data.getEmployerId());
     }
 
-    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("remove")
+    public void removeCustomerFromEmployer(
+            @Validated @RequestBody CustomerIdAndEmployerIdRequest data
+    ) {
+        employerFacade.removeCustomerFromEmployer(data.getCustomerId(), data.getEmployerId());
+    }
+
+    @PostMapping(path = "")
     public EmployerDtoResponse createEmployer(
             @Validated(New.class) @RequestBody EmployerDtoRequest employer
     ) {
         return employerFacade.save(employer);
     }
 
-    @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "")
     public EmployerDtoResponse updateEmployer(@Validated(Update.class) @RequestBody EmployerDtoRequest employer) {
         return employerFacade.update(employer);
     }
