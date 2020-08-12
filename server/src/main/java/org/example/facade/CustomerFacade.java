@@ -4,9 +4,12 @@ import org.example.dto.request.CustomerDtoRequest;
 import org.example.dto.response.CustomerDtoResponse;
 import org.example.entity.Customer;
 import org.example.service.CustomerService;
+import org.example.service.imp.CustomerServiceIml;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDtoResponse> {
+public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDtoResponse>, CustomerServiceIml {
 
     @Autowired
     CustomerService customerService;
@@ -62,5 +65,10 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
         Customer byId = customerService.getById(id);
         CustomerDtoResponse map = mapper.map(byId, CustomerDtoResponse.class);
         return map;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return customerService.loadUserByUsername(s);
     }
 }

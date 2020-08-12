@@ -2,19 +2,23 @@ package org.example.service;
 
 import org.example.entity.Customer;
 import org.example.repos.CustomerRepository;
+import org.example.service.imp.CustomerServiceIml;
 import org.example.service.imp.ServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("customerService")
 @Transactional(isolation = Isolation.SERIALIZABLE)
-public class CustomerService implements ServiceIml<Customer> {
+public class CustomerService implements ServiceIml<Customer>, CustomerServiceIml {
 
     @Autowired
     CustomerRepository customerRepository;
@@ -61,5 +65,12 @@ public class CustomerService implements ServiceIml<Customer> {
     public Customer getById(Long id) {
         Customer customer = customerRepository.findById(id).get();
         return customer;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Optional<Customer> user = customerRepository.findByEmail(s);
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found userName"));
+        return user.get();
     }
 }
