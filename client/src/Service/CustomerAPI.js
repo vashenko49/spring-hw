@@ -14,4 +14,8 @@ export default class CustomerAPI {
             page, limit
         }
     }).then(res => res.data);
+    static signInCustomer = (email, password) => axios.post("/api0/customer/authenticate", {
+        email,
+        password
+    }).then(res => res.data);
 }

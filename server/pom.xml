@@ -85,6 +85,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
@@ -99,46 +103,46 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <version>1.10.0</version>
-            <configuration>
-                <workingDirectory>basic-frontend-app</workingDirectory>
-                <installDirectory>target</installDirectory>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>install node and yarn</id>
-                    <goals>
-                        <goal>install-node-and-yarn</goal>
-                    </goals>
-                    <configuration>
-                        <nodeVersion>v12.18.0</nodeVersion>
-                        <yarnVersion>v1.22.4</yarnVersion>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>yarn install</id>
-                    <goals>
-                        <goal>yarn</goal>
-                    </goals>
-                    <configuration>
-                        <arguments>install</arguments>
-                        <workingDirectory>../client</workingDirectory>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>yarn run build</id>
-                    <goals>
-                        <goal>yarn</goal>
-                    </goals>
-                    <configuration>
-                        <arguments>run build</arguments>
-                        <workingDirectory>../client</workingDirectory>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.10.0</version>
+                <configuration>
+                    <workingDirectory>basic-frontend-app</workingDirectory>
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and yarn</id>
+                        <goals>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v12.18.0</nodeVersion>
+                            <yarnVersion>v1.22.4</yarnVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn install</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                            <workingDirectory>../client</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn run build</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                            <workingDirectory>../client</workingDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
