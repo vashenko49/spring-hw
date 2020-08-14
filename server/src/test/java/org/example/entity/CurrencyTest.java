@@ -1,9 +1,9 @@
 package org.example.entity;
 
 import org.example.entity.enums.Currency;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CurrencyTest {
     @Test

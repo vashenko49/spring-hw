@@ -1,9 +1,6 @@
 package org.example.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
 import org.example.entity.enums.Currency;
@@ -13,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

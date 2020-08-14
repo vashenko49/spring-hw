@@ -21,5 +21,24 @@ spring:
     password: password
     data: classpath:data.sql
     initialization-mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 528898458679-5ddj122tsr78s1s8ci7g42lbeqo9aou6.apps.googleusercontent.com
+            clientSecret: IIcLDJMggttBHiN21ykJs6TL
+            redirectUri: "{baseUrl}/api0/oauth2/google"
+            authorizationGrantType: authorization_code
+            scope:
+              - profile
+              - email
+        provider:
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+            tokenUri: https://www.googleapis.com/oauth2/v4/token
+            userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+            jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
+            userNameAttribute: profile
 server:
   port: 9000
