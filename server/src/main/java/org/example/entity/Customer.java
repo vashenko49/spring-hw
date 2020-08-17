@@ -31,11 +31,9 @@ public class Customer extends AbstractEntity implements UserDetails {
     private String name;
     @Column(unique = true, nullable = false)
     private String email;
-    @Column(nullable = false)
     private Integer age;
-    @Column(nullable = false)
     private String password;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String phone;
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Account> accounts = new ArrayList<>();

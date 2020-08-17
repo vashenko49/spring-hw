@@ -71,4 +71,9 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return customerService.loadUserByUsername(s);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return customerService.existsByEmail(email);
+    }
 }

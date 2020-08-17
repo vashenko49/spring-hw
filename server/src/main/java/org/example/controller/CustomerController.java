@@ -5,21 +5,25 @@ import org.example.dto.request.CustomerDtoRequest;
 import org.example.dto.request.SignIn;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
+import org.example.dto.response.AuthResponse;
 import org.example.dto.response.CustomerDtoResponse;
 import org.example.dto.response.groups.FullUser;
 import org.example.dto.response.groups.ListUser;
-import org.example.entity.AuthenticateResponseJwt;
+import org.example.exception.BadRequestException;
 import org.example.facade.CustomerFacade;
-import org.example.util.JwtUtil;
+import org.example.security.oauth2.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -31,8 +35,13 @@ public class CustomerController {
 
     @Autowired
     CustomerFacade customerFacade;
+
     @Autowired
-    private JwtUtil jwtUtil;
+    private TokenProvider tokenProvider;
+
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/{id}")
     @JsonView({FullUser.class})
@@ -65,18 +74,27 @@ public class CustomerController {
 
     @PostMapping("/authenticate")
     private ResponseEntity<?> logIn(@Validated @RequestBody SignIn signIn) throws Exception {
-        try {
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect userName or password");
+
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
+        );
+
+
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        String token = tokenProvider.createToken(authenticate);
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+    @PostMapping("/signup")
+    public CustomerDtoResponse registerUser(@Valid @RequestBody CustomerDtoRequest user) {
+        if (customerFacade.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email address already in use.");
         }
 
-        final UserDetails userDetails = customerFacade.loadUserByUsername(signIn.getEmail());
-        final String s = jwtUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticateResponseJwt(s));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        CustomerDtoResponse save = customerFacade.save(user);
+        return save;
     }
 }
