@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -32,6 +33,8 @@ public class CustomerService extends DefaultOAuth2UserService implements Service
 
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Override
     public Customer save(Customer obj) {
@@ -40,6 +43,7 @@ public class CustomerService extends DefaultOAuth2UserService implements Service
 
     @Override
     public Customer update(Customer obj) {
+        obj.setPassword(passwordEncoder.encode(obj.getPassword()));
         return customerRepository.save(obj);
     }
 
@@ -81,7 +85,7 @@ public class CustomerService extends DefaultOAuth2UserService implements Service
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<Customer> user = customerRepository.findByEmail(s);
         user.orElseThrow(() -> new UsernameNotFoundException("Not found userName"));
-        return user.get();
+        return UserPrincipal.create(user.get());
     }
 
     @Override

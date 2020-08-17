@@ -25,8 +25,8 @@ export const customerSignIn = (email, password, history) => dispatch => {
     });
     CustomerAPI.signInCustomer(email, password)
         .then(res => {
-            const {jwt} = res;
-            const bearer = `Bearer ${jwt}`;
+            const {accessToken} = res;
+            const bearer = `Bearer ${accessToken}`;
             axios.defaults.headers.common['Authorization'] = bearer;
             localStorage.setItem("Authorization", bearer)
             dispatch({
@@ -73,3 +73,19 @@ export const customerErrorOrSignOut = () => dispatch => {
     })
 };
 
+
+export const customerSignInWithOAuth2 = token => dispatch => {
+    const bearer = `Bearer ${token}`;
+    axios.defaults.headers.common['Authorization'] = bearer;
+    localStorage.setItem("Authorization", bearer)
+    dispatch({
+        type: SYSTEM.USER_SIGN_IN
+    })
+}
+
+
+export const autoSignIn = () => {
+    return {
+        type: SYSTEM.USER_SIGN_IN
+    }
+};

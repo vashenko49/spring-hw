@@ -97,4 +97,8 @@ public class CustomerController {
         CustomerDtoResponse save = customerFacade.save(user);
         return save;
     }
+
+    @GetMapping("/token-active")
+    public void checkingForTokenActivity() {
+    }
 }

@@ -34,4 +34,5 @@ public class Main {
     public AuditorAware<String> auditorAware() {
         return new AuditorAwareImpl();
     }
+
 }

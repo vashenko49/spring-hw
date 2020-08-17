@@ -11,6 +11,11 @@ import CardContent from "@material-ui/core/CardContent";
 import {bindActionCreators} from "redux";
 import * as SystemAction from "../../actions/System/System";
 import {connect} from "react-redux";
+import FacebookIcon from '@material-ui/icons/Facebook';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import {FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, GOOGLE_AUTH_URL} from "../../config/OAuth2URL";
+import {Redirect} from "react-router";
+import GTranslateIcon from '@material-ui/icons/GTranslate';
 
 const useStyles = makeStyles({
     root: {
@@ -30,7 +35,7 @@ const useStyles = makeStyles({
 });
 
 
-const SignIn = ({customerSignIn, history}) => {
+const SignIn = ({customerSignIn, history, System: {isAuth}}) => {
     const classes = useStyles();
     const [userData, setUserData] = useState({
         email: "",
@@ -44,71 +49,113 @@ const SignIn = ({customerSignIn, history}) => {
     }
 
     return (
-        <Container>
-            <Card className={classes.root}>
-                <CardContent>
-                    <Typography variant={'h5'} align={'center'}>
-                        Sign In your account
-                    </Typography>
-                    <ValidatorForm onSubmit={handleSubmit} onError={e => console.log(e)}>
-                        <TextValidator
-                            className={classes.inputData}
-                            label={'Email'}
-                            onChange={e => setUserData({...userData, email: e.target.value})}
-                            name="email"
-                            value={userData.email}
-                            fullWidth
-                            variant="outlined"
-                            validators={['required', 'isEmail']}
-                            errorMessages={['This field is required', 'Email is not valid']}
-                        />
-                        <TextValidator
-                            className={classes.inputData}
-                            label={'Password'}
-                            onChange={e => setUserData({...userData, password: e.target.value})}
-                            name="password"
-                            value={userData.password}
-                            fullWidth
-                            variant="outlined"
-                            validators={['required', 'matchRegexp:^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$']}
-                            errorMessages={['This field is required', 'Password must be at least 8 characters and contain at least 1 uppercase and 1 lowercase letter']}
-                            type={showPassword ? 'text' : 'password'}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment
-                                        position="end"
-                                        onClick={() => {
-                                            setShowPassword(!showPassword);
-                                        }}
-                                        className={classes.iconEyes}
-                                    >
-                                        {showPassword ? <RemoveRedEye/> : <VisibilityOff/>}
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                        <Button
-                            className={classes.inputData}
-                            type={'submit'}
-                            fullWidth={true}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Log In
-                        </Button>
-                        <div >
-                            <Button href={GOOGLE_AUTH_URL}>
-                                <img src={googleLogo} alt="Google" /> Log in with Google</Button>
-                            <Button href={FACEBOOK_AUTH_URL}>
-                                <img src={fbLogo} alt="Facebook" /> Log in with Facebook</Button>
-                            <Button  href={GITHUB_AUTH_URL}>
-                                <img src={githubLogo} alt="Github" /> Log in with Github</Button>
-                        </div>
-                    </ValidatorForm>
-                </CardContent>
-            </Card>
-        </Container>
+        <>
+            {
+                isAuth ?
+                    (
+                        <Redirect to={{
+                            pathname: "/customer"
+                        }}/>
+                    ) : (
+                        <Container>
+                            <Card className={classes.root}>
+                                <CardContent>
+                                    <Typography variant={'h5'} align={'center'}>
+                                        Sign In your account
+                                    </Typography>
+                                    <ValidatorForm onSubmit={handleSubmit} onError={e => console.log(e)}>
+                                        <TextValidator
+                                            className={classes.inputData}
+                                            label={'Email'}
+                                            onChange={e => setUserData({...userData, email: e.target.value})}
+                                            name="email"
+                                            value={userData.email}
+                                            fullWidth
+                                            variant="outlined"
+                                            validators={['required', 'isEmail']}
+                                            errorMessages={['This field is required', 'Email is not valid']}
+                                        />
+                                        <TextValidator
+                                            className={classes.inputData}
+                                            label={'Password'}
+                                            onChange={e => setUserData({...userData, password: e.target.value})}
+                                            name="password"
+                                            value={userData.password}
+                                            fullWidth
+                                            variant="outlined"
+                                            validators={['required', 'matchRegexp:^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$']}
+                                            errorMessages={['This field is required', 'Password must be at least 8 characters and contain at least 1 uppercase and 1 lowercase letter']}
+                                            type={showPassword ? 'text' : 'password'}
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment
+                                                        position="end"
+                                                        onClick={() => {
+                                                            setShowPassword(!showPassword);
+                                                        }}
+                                                        className={classes.iconEyes}
+                                                    >
+                                                        {showPassword ? <RemoveRedEye/> : <VisibilityOff/>}
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                        />
+                                        <Button
+                                            className={classes.inputData}
+                                            type={'submit'}
+                                            fullWidth={true}
+                                            variant="contained"
+                                            color="primary"
+                                        >
+                                            Log In
+                                        </Button>
+
+                                    </ValidatorForm>
+                                    <div>
+                                        <Typography align={"center"} variant={"h4"}>Or use social</Typography>
+                                        <Button
+                                            fullWidth
+                                            href={FACEBOOK_AUTH_URL}
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.inputData}
+                                            endIcon={<FacebookIcon>Facebook</FacebookIcon>}
+                                        >
+                                            Facebook
+                                        </Button>
+                                        <Button
+                                            fullWidth
+                                            href={GITHUB_AUTH_URL}
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.inputData}
+                                            endIcon={<GitHubIcon>GitHub</GitHubIcon>}
+                                        >
+                                            GitHub
+                                        </Button>
+                                        <Button
+                                            fullWidth
+                                            href={GOOGLE_AUTH_URL}
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.inputData}
+                                            endIcon={<GTranslateIcon>Google</GTranslateIcon>}
+                                        >
+                                            Google
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </Container>)
+            }
+        </>
     );
+};
+
+const mapStateToProps = state => {
+    return {
+        System: state.System
+    };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -117,4 +164,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

@@ -18,4 +18,10 @@ export default class CustomerAPI {
         email,
         password
     }).then(res => res.data);
+
+    static checkingForTokenActivity = jwt => axios.get("/api0/customer/token-active", {
+        headers: {
+            Authorization: jwt
+        }
+    })
 }

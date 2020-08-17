@@ -41,7 +41,7 @@ const CustomerDetail = ({history, startLoad, stopLoad}) => {
         name: "",
         email: "",
         age: 30,
-        phone: 30,
+        phone: '',
         version: 0,
         accounts: [],
         employers: []
