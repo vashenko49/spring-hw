@@ -87,11 +87,12 @@ public class EmployerControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+
     @Test
     public void testAddCustomerToEmployerUnAuth() throws Exception {
         mockMvc.perform(put("/api0/employer/add")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @WithMockUser(value = "enail1@gmail.com")

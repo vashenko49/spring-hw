@@ -1,16 +1,14 @@
 package org.example.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import org.example.dto.response.groups.FullUser;
 import org.example.dto.response.groups.ListUser;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

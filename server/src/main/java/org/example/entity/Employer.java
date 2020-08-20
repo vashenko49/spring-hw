@@ -8,6 +8,7 @@ import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Entity
 @Table(name = "employer",
         uniqueConstraints = {

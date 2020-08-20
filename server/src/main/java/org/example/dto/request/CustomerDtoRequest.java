@@ -1,10 +1,7 @@
 package org.example.dto.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
 
@@ -12,6 +9,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

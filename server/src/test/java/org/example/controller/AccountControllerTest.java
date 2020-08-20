@@ -39,7 +39,7 @@ class AccountControllerTest {
 
     @WithMockUser(value = "enail1@gmail.com")
     @Test
-    void getCustomerById() throws Exception {
+    void getAccountByIdTest() throws Exception {
         AccountDtoResponse build = AccountDtoResponse.builder().balance(1234.0).currency(Currency.CHF).number("1234").id(1L).build();
         given(accountFacade.getById(anyLong())).willReturn(build);
 
@@ -51,7 +51,7 @@ class AccountControllerTest {
 
     @WithMockUser(value = "enail1@gmail.com")
     @Test
-    void getCustomerByNumber() throws Exception {
+    void getAccountByNumber() throws Exception {
         AccountDtoResponse build = AccountDtoResponse.builder().balance(1234.0).currency(Currency.CHF).number("1234").id(1L).build();
         given(accountFacade.getAccountByNumber(anyString())).willReturn(build);
 
@@ -63,7 +63,7 @@ class AccountControllerTest {
 
     @WithMockUser(value = "enail1@gmail.com")
     @Test
-    void getAllCustomers() throws Exception {
+    void getAllAccount() throws Exception {
         AccountDtoResponse accountDtoResponse = AccountDtoResponse.builder().id(1L).balance(1234.3).currency(Currency.CHF).number("123").build();
         PageRequest pageRequest = PageRequest.of(1, 1);
         List<AccountDtoResponse> accountDtoResponseList = Collections.singletonList(accountDtoResponse);
@@ -83,19 +83,19 @@ class AccountControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @WithMockUser(value = "enail1@gmail.com")
-    @Test
-    void topUpAccount() {
-
-    }
-
-    @WithMockUser(value = "enail1@gmail.com")
-    @Test
-    void withdrawFromAccount() {
-    }
-
-    @WithMockUser(value = "enail1@gmail.com")
-    @Test
-    void transfer() {
-    }
+//    @WithMockUser(value = "enail1@gmail.com")
+//    @Test
+//    void topUpAccount() {
+//
+//    }
+//
+//    @WithMockUser(value = "enail1@gmail.com")
+//    @Test
+//    void withdrawFromAccount() {
+//    }
+//
+//    @WithMockUser(value = "enail1@gmail.com")
+//    @Test
+//    void transfer() {
+//    }
 }

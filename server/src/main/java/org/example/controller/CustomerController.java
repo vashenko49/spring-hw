@@ -39,7 +39,6 @@ public class CustomerController {
     @Autowired
     private TokenProvider tokenProvider;
 
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -98,6 +97,10 @@ public class CustomerController {
         return save;
     }
 
+
+    /*
+    * Return 200 status when token is valid or 401
+    * */
     @GetMapping("/token-active")
     public void checkingForTokenActivity() {
     }

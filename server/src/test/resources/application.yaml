@@ -21,5 +21,46 @@ spring:
     password: password
     data: classpath:data.sql
     initialization-mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 528898458679-5ddj122tsr78s1s8ci7g42lbeqo9aou6.apps.googleusercontent.com
+            clientSecret: IIcLDJMggttBHiN21ykJs6TL
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: 1523405104530417
+            clientSecret: 7c7a25714b2d4614ad4ea7aa7aede71a
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+          github:
+            clientId: 1384d7625fd66e8fb870
+            clientSecret: 5b05b57784a11fc0b4a9cb1d235e030b71374ea3
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpirationMsec: 864000000
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
 server:
-  port: 9001
+  port: 9000

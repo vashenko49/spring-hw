@@ -20,17 +20,17 @@ public class AccountController {
     AccountFacade accountFacade;
 
     @GetMapping("/{id}")
-    public AccountDtoResponse getCustomerById(@PathVariable(value = "id") Long id) {
+    public AccountDtoResponse getAccountById(@PathVariable(value = "id") Long id) {
         return accountFacade.getById(id);
     }
 
     @GetMapping("/number/{number}")
-    public AccountDtoResponse getCustomerByNumber(@PathVariable(value = "number") String number) {
+    public AccountDtoResponse getAccountByNumber(@PathVariable(value = "number") String number) {
         return accountFacade.getAccountByNumber(number);
     }
 
     @GetMapping("")
-    public Page<AccountDtoResponse> getAllCustomers(
+    public Page<AccountDtoResponse> getAllAccount(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
         return accountFacade.findAll(page, limit);
