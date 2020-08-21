@@ -1,11 +1,12 @@
 package org.example.service.imp;
 
+import org.example.exception.CustomerNotFound;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface DefaultIml<EntReq, EntRes> {
-    EntRes save(EntReq obj);
+    EntRes save(EntReq obj) throws CustomerNotFound;
     EntRes update(EntReq obj);
 
     void delete(EntReq obj);
@@ -18,5 +19,5 @@ public interface DefaultIml<EntReq, EntRes> {
 
     void deleteById(Long id);
 
-    EntRes getById(Long id);
+    EntRes getById(Long id) throws CustomerNotFound;
 }

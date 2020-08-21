@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.Customer;
+import org.example.exception.CustomerNotFound;
 import org.example.exception.OAuth2AuthenticationProcessingException;
 import org.example.repos.CustomerRepository;
 import org.example.security.UserPrincipal;
@@ -76,9 +77,10 @@ public class CustomerService extends DefaultOAuth2UserService implements Service
 
     @Override
     @Transactional(readOnly = true)
-    public Customer getById(Long id) {
-        Customer customer = customerRepository.findById(id).get();
-        return customer;
+    public Customer getById(Long id) throws CustomerNotFound {
+        Optional<Customer> byId = customerRepository.findById(id);
+        byId.orElseThrow(() -> new CustomerNotFound("Customer not fount"));
+        return byId.get();
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.example.facade;
 import org.example.dto.request.CustomerDtoRequest;
 import org.example.dto.response.CustomerDtoResponse;
 import org.example.entity.Customer;
+import org.example.exception.CustomerNotFound;
 import org.example.service.CustomerService;
 import org.example.service.imp.CustomerServiceIml;
 import org.modelmapper.ModelMapper;
@@ -61,7 +62,7 @@ public class CustomerFacade implements FacadeIml<CustomerDtoRequest, CustomerDto
     }
 
     @Override
-    public CustomerDtoResponse getById(Long id) {
+    public CustomerDtoResponse getById(Long id) throws CustomerNotFound {
         Customer byId = customerService.getById(id);
         CustomerDtoResponse map = mapper.map(byId, CustomerDtoResponse.class);
         return map;

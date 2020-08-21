@@ -4,6 +4,7 @@ import org.example.dto.request.AccountDtoRequest;
 import org.example.dto.response.AccountDtoResponse;
 import org.example.entity.Account;
 import org.example.entity.Customer;
+import org.example.exception.CustomerNotFound;
 import org.example.service.AccountService;
 import org.example.service.CustomerService;
 import org.example.service.imp.AccountServiceIml;
@@ -46,7 +47,7 @@ public class AccountFacade implements FacadeIml<AccountDtoRequest, AccountDtoRes
     }
 
     @Override
-    public AccountDtoResponse save(AccountDtoRequest obj) {
+    public AccountDtoResponse save(AccountDtoRequest obj) throws CustomerNotFound {
         Customer byId = customerService.getById(obj.getCustomer());
         Account map = mapper.map(obj, Account.class);
         map.setCustomer(byId);

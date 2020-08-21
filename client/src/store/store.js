@@ -8,6 +8,8 @@ import * as SystemAction from '../actions/System/System'
 import axios from "axios";
 
 const logger = createLogger();
+
+
 export default function configureStore() {
     let store = createStore(rootReducer, {}, composeWithDevTools(applyMiddleware(logger, thunk)));
     let token = localStorage.getItem("Authorization");
@@ -19,7 +21,7 @@ export default function configureStore() {
                 localStorage.setItem("Authorization", token)
                 store.dispatch(SystemAction.autoSignIn())
             })
-            .catch(()=>{
+            .catch(() => {
                 localStorage.removeItem("Authorization");
             })
     }
