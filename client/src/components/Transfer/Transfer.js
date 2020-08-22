@@ -4,10 +4,9 @@ import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import FormControl from "@material-ui/core/FormControl";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
-import AccountAPI from "../../Service/AccountAPI";
 import {bindActionCreators} from "redux";
 import * as SystemAction from "../../actions/System/System";
-import * as NotistackAction from '../../actions/Notistack/Notistack'
+
 import {connect} from "react-redux";
 
 const useStyles = makeStyles({
@@ -20,7 +19,7 @@ const useStyles = makeStyles({
 })
 
 
-const Transfer = ({startLoad, stopLoad, enqueueSnackbar, closeSnackbar}) => {
+const Transfer = ({ topUp, withDraw, transfer}) => {
     const classes = useStyles();
     const [topUpData, setTopUpData] = useState({
         toNum: "",
@@ -34,31 +33,7 @@ const Transfer = ({startLoad, stopLoad, enqueueSnackbar, closeSnackbar}) => {
     }
     const handleSubmitTopUp = e => {
         e.preventDefault();
-        startLoad()
-        AccountAPI.topUpAccount(topUpData)
-            .then(res => {
-                enqueueSnackbar({
-                    message: "Success",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'success',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .catch(e => {
-                enqueueSnackbar({
-                    message: "Error",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'error',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .finally(() => {
-                stopLoad();
-            })
+        topUp(topUpData);
     }
 
     const [withdrawData, setWithdrawData] = useState({
@@ -73,31 +48,7 @@ const Transfer = ({startLoad, stopLoad, enqueueSnackbar, closeSnackbar}) => {
     }
     const handleSubmitWithdraw = e => {
         e.preventDefault();
-        startLoad()
-        AccountAPI.withdrawFromAccount(withdrawData)
-            .then(res => {
-                enqueueSnackbar({
-                    message: "Success",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'success',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .catch(e => {
-                enqueueSnackbar({
-                    message: "Error",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'error',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .finally(() => {
-                stopLoad();
-            })
+        withDraw(withdrawData)
     }
 
     const [transferData, setTransferData] = useState({
@@ -113,31 +64,7 @@ const Transfer = ({startLoad, stopLoad, enqueueSnackbar, closeSnackbar}) => {
     }
     const handleSubmitTransfer = e => {
         e.preventDefault();
-        startLoad()
-        AccountAPI.transfer(transferData)
-            .then(res => {
-                enqueueSnackbar({
-                    message: "Success",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'success',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .catch(e => {
-                enqueueSnackbar({
-                    message: "Error",
-                    options: {
-                        key: new Date().getTime() + Math.random(),
-                        variant: 'error',
-                        action: key => <Button onClick={() => closeSnackbar(key)}>dismiss me</Button>
-                    }
-                });
-            })
-            .finally(() => {
-                stopLoad();
-            })
+        transfer(transferData);
     }
 
     return (
@@ -279,10 +206,9 @@ const Transfer = ({startLoad, stopLoad, enqueueSnackbar, closeSnackbar}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        startLoad: bindActionCreators(SystemAction.startLoad, dispatch),
-        stopLoad: bindActionCreators(SystemAction.stopLoad, dispatch),
-        enqueueSnackbar: bindActionCreators(NotistackAction.enqueueSnackbar, dispatch),
-        closeSnackbar: bindActionCreators(NotistackAction.closeSnackbar, dispatch),
+        topUp: bindActionCreators(SystemAction.topUp, dispatch),
+        withDraw: bindActionCreators(SystemAction.withDraw, dispatch),
+        transfer: bindActionCreators(SystemAction.transfer, dispatch)
     };
 };
 

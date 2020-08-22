@@ -6,12 +6,13 @@ import {createLogger} from 'redux-logger';
 import CustomerAPI from "../Service/CustomerAPI";
 import * as SystemAction from '../actions/System/System'
 import axios from "axios";
+import WebSocketMiddleWare from "../WebSocketMiddleWare/WebSocketMiddleWare";
 
 const logger = createLogger();
 
 
 export default function configureStore() {
-    let store = createStore(rootReducer, {}, composeWithDevTools(applyMiddleware(logger, thunk)));
+    let store = createStore(rootReducer, {}, composeWithDevTools(applyMiddleware(logger, thunk, WebSocketMiddleWare)));
     let token = localStorage.getItem("Authorization");
 
     if (token) {

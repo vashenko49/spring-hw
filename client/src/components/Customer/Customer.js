@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     }
 })
 
+
 const Customer = ({history}) => {
     const classes = useStyles();
     const tableRef = createRef();
@@ -137,7 +138,6 @@ const Customer = ({history}) => {
                     }
                 ]}
             />
-
         </Container>
     );
 };

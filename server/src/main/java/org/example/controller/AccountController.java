@@ -8,10 +8,14 @@ import org.example.dto.request.groups.FromToTransfer;
 import org.example.dto.request.groups.New;
 import org.example.dto.request.groups.Update;
 import org.example.dto.response.AccountDtoResponse;
+import org.example.dto.response.OperationWithAccountResponse;
+import org.example.dto.response.TypeOperationWithAccount;
 import org.example.exception.CustomerNotFound;
 import org.example.facade.AccountFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,6 +87,44 @@ public class AccountController {
     ) {
         log.info("Transfer {} sum from {} to {}", transferDtoRequest.getSum(), transferDtoRequest.getFromNum(), transferDtoRequest.getToNum());
         accountFacade.transfer(transferDtoRequest.getFromNum(), transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+    }
+
+    @MessageMapping("/top-up")
+    @SendTo("/response/data")
+    public OperationWithAccountResponse topUpAccountSocket(TransferDtoRequest transferDtoRequest) {
+        log.info("Top up socket account by {} number to {}", transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+        accountFacade.topUpAccount(transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+
+        return OperationWithAccountResponse.builder()
+                .type(TypeOperationWithAccount.topUp)
+                .to(transferDtoRequest.getToNum())
+                .sum(transferDtoRequest.getSum())
+                .build();
+    }
+
+    @MessageMapping("/with-draw")
+    @SendTo("/response/data")
+    public OperationWithAccountResponse withdrawFromAccountSocket(TransferDtoRequest transferDtoRequest) {
+        log.info("Top up socket account by {} number to {}", transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+        accountFacade.withdrawFromAccount(transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+        return OperationWithAccountResponse.builder()
+                .type(TypeOperationWithAccount.withDraw)
+                .to(transferDtoRequest.getToNum())
+                .sum(transferDtoRequest.getSum())
+                .build();
+    }
+
+    @MessageMapping("/transfer")
+    @SendTo("/response/data")
+    public OperationWithAccountResponse transferSocket(TransferDtoRequest transferDtoRequest) {
+        log.info("Transfer {} sum from {} to {}", transferDtoRequest.getSum(), transferDtoRequest.getFromNum(), transferDtoRequest.getToNum());
+        accountFacade.transfer(transferDtoRequest.getFromNum(), transferDtoRequest.getToNum(), transferDtoRequest.getSum());
+        return OperationWithAccountResponse.builder()
+                .type(TypeOperationWithAccount.transfer)
+                .from(transferDtoRequest.getFromNum())
+                .to(transferDtoRequest.getToNum())
+                .sum(transferDtoRequest.getSum())
+                .build();
     }
 
 
